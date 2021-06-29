@@ -62,7 +62,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"entityID\": \"16a596ae-edd3-4847-99fe-c4518e82c86f\",\r\n    \"salary\": \"1.99\"\r\n}",
+					"raw": "{\r\n    \"salary\": \"1.99\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -80,6 +80,51 @@
 						"api",
 						"employee",
 						"compensation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Employee Compensation",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "0883a639306c4bb55abdec38a0a959ddc758a2bcf449adf1b8f80605dc3e749f",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n \"0d62a1ea-dfdb-46f6-8bd3-b565ee315a1d\"\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/employee/compensation/16a596ae-edd3-4847-99fe-c4518e82c86f",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employee",
+						"compensation",
+						"16a596ae-edd3-4847-99fe-c4518e82c86f"
 					]
 				}
 			},
