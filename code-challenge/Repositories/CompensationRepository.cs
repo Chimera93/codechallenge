@@ -22,17 +22,18 @@ namespace challenge.Repositories
 
         public Compensation GetByID(string id)
         {
-            return _compensationContext.Compensations.SingleOrDefault(c => c.identifier == id);
+            return _compensationContext.Compensations.SingleOrDefault(c => c.CompensationID == id);
         }
 
-        public Compensation GetByEmployeeID(string id)
+        /*public Compensation GetByEmployeeID(string id)
         {
+            Employee target = 
             return _compensationContext.Compensations.SingleOrDefault(c => c.entityID == id);
-        }
+        }*/
 
         public Compensation Create(Compensation comp)
         {
-            comp.identifier = Guid.NewGuid().ToString();
+            comp.CompensationID = Guid.NewGuid().ToString();
             _compensationContext.Compensations.Add(comp);
 
             _compensationContext.Entry(comp).State = EntityState.Added;

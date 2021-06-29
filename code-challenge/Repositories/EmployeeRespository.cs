@@ -12,11 +12,13 @@ namespace challenge.Repositories
     public class EmployeeRespository : IEmployeeRepository
     {
         private readonly EmployeeContext _employeeContext;
+        private readonly CompensationContext _compensationContext;
         private readonly ILogger<IEmployeeRepository> _logger;
 
-        public EmployeeRespository(ILogger<IEmployeeRepository> logger, EmployeeContext employeeContext)
+        public EmployeeRespository(ILogger<IEmployeeRepository> logger, EmployeeContext employeeContext, CompensationContext compensationContext)
         {
             _employeeContext = employeeContext;
+            _compensationContext = compensationContext;
             _logger = logger;
         }
 
@@ -40,6 +42,35 @@ namespace challenge.Repositories
         public Employee Remove(Employee employee)
         {
             return _employeeContext.Remove(employee).Entity;
+        }
+
+        public Compensation GetEmployeeCompensation(string id)
+        {
+            Employee target = _employeeContext.Employees.SingleOrDefault(e => e.EmployeeId == id);
+
+            return _compensationContext.Compensations.SingleOrDefault(c => c.CompensationID == target.CompensationID);
+        }
+
+        public bool Update(Employee employee)
+        {
+            Employee curr = _employeeContext.Employees.SingleOrDefault(e => e.EmployeeId == employee.EmployeeId);
+
+            try
+            {                
+                _employeeContext.Entry(curr).State = EntityState.Modified;
+                curr = employee;
+
+                SaveAsync();
+
+                return true;
+            }
+            catch(Exception ex)
+            {
+                _employeeContext.Entry(curr).State = EntityState.Unchanged;
+                //Log
+            }
+
+            return false;
         }
     }
 }

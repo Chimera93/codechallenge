@@ -14,11 +14,13 @@ namespace challenge.Controllers
     {
         private readonly ILogger _logger;
         private readonly IEmployeeService _employeeService;
+        private readonly ICompensationService _compensationService;
 
-        public EmployeeController(ILogger<EmployeeController> logger, IEmployeeService employeeService)
+        public EmployeeController(ILogger<EmployeeController> logger, IEmployeeService employeeService, ICompensationService compensationService)
         {
             _logger = logger;
             _employeeService = employeeService;
+            _compensationService = compensationService;
         }
 
         [HttpPost]
@@ -94,7 +96,7 @@ namespace challenge.Controllers
             return Ok(reports);
         }
 
-        [HttpGet(Name = "compensation")]
+        [HttpGet]
         [Route("compensation/{id}")]
         public IActionResult GetEmployeeCompensation(string id)
         {
@@ -112,22 +114,48 @@ namespace challenge.Controllers
             return Ok(comp);
         }
 
-        [HttpPut(Name = "compensation")]
-        [Route("compensation")]
-        public IActionResult CreateEmployeeCompensation([FromBody] Compensation compensation)
+        [HttpPut]
+        [Route("compensation/{id}")]
+        public IActionResult CreateEmployeeCompensation(string id, [FromBody] Compensation compensation)
         {
-            _logger.LogDebug($"Creating compensation for '{compensation.entityID}'");
+            _logger.LogDebug($"Creating compensation for '{id}'");
 
             var comp = _employeeService.CreateEmployeeCompensation(compensation);
 
             if (comp == null)
             {
                 //Depending on the use case for this endpoint (user-facing or not) I'd want to change the logging to be more informative
-                _logger.LogDebug($"Error creating compensation for '{compensation.entityID}'. Consult logs for further information.");
+                _logger.LogDebug($"Error creating compensation for '{id}'. Consult logs for further information.");
                 return NotFound();
+            }
+            else
+            {
+                _employeeService.SetEmployeeCompensation(id, comp.CompensationID);
             }
 
             return Ok(comp);
+        }
+
+        [HttpPost]
+        [Route("compensation/{eid}")]
+        public IActionResult UpdateEmployeeCompensation(string eid, [FromBody] string cid)
+        {
+            _logger.LogDebug($"Updating compensation for '{eid}'");
+
+            var comp = _compensationService.GetByID(cid);
+
+            if (comp == null)
+            {
+                //Depending on the use case for this endpoint (user-facing or not) I'd want to change the logging to be more informative
+                _logger.LogDebug($"Error retrieving compensation '{cid}'. Consult logs for further information.");
+                return NotFound();
+            }
+            else
+            {
+                _employeeService.SetEmployeeCompensation(eid, comp.CompensationID);
+            }
+
+            return Ok(_employeeService.GetById(eid));
         }
     }
 }
