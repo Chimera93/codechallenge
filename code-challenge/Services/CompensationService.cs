@@ -29,7 +29,7 @@ namespace challenge.Services
             return null;
         }
 
-        public Compensation GetByEmployeeID(string id)
+        /*public Compensation GetByEmployeeID(string id)
         {
             if (!String.IsNullOrEmpty(id))
             {
@@ -37,7 +37,7 @@ namespace challenge.Services
             }
 
             return null;
-        }
+        }*/
 
         public Compensation Create(Compensation comp)
         {

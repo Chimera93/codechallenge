@@ -32,6 +32,11 @@ namespace challenge.Services
             return employee;
         }
 
+        public bool Update(Employee employee)
+        {
+            return _employeeRepository.Update(employee);
+        }
+
         public Employee GetById(string id)
         {
             if(!String.IsNullOrEmpty(id))
@@ -143,8 +148,8 @@ namespace challenge.Services
             Compensation comp = null;
 
             try
-            {
-                comp = _compensationRepository.GetByEmployeeID(id);
+            {         
+                comp = _compensationRepository.GetByID(_employeeRepository.GetById(id).CompensationID);
             }
             catch(Exception ex)
             {
@@ -170,6 +175,15 @@ namespace challenge.Services
             }
 
             return comp;
+        }
+
+        public bool SetEmployeeCompensation(string employeeIdentifier, string compensationIdentifier)
+        {
+            Employee target = GetById(employeeIdentifier);
+
+            target.CompensationID = compensationIdentifier;
+
+            return Update(target);           
         }
 
         /*

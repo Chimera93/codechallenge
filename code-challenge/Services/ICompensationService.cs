@@ -10,7 +10,7 @@ namespace challenge.Services
     {
         Compensation GetByID(string id);
 
-        Compensation GetByEmployeeID(string id);
+        //Compensation GetByEmployeeID(string id);
 
         Compensation Create(Compensation comp);
     }
